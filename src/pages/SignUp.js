@@ -1,10 +1,10 @@
 import { Container, Form, Button, Col, Card } from 'react-bootstrap';
 import { useForm, Controller } from 'react-hook-form';
-import { setDataOnLocalStorage } from '../utils/localStroage';
+import { useNavigate } from 'react-router-dom';
 
 import request from '../utils/request';
 import { useUser } from '../contexts/user';
-import { useNavigate } from 'react-router-dom';
+import { setDataOnLocalStorage } from '../utils/localStorage';
 
 export default function SignUp() {
   const {

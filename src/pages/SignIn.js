@@ -1,5 +1,10 @@
 import { Container, Form, Button, Col, Card } from 'react-bootstrap';
 import { useForm, Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+
+import request from '../utils/request';
+import { useUser } from '../contexts/user';
+import { setDataOnLocalStorage } from '../utils/localStorage';
 
 export default function SignIn() {
   const {
@@ -8,11 +13,25 @@ export default function SignIn() {
     reset,
     formState: { errors },
   } = useForm();
+  const [, dispatch] = useUser();
+  const navigate = useNavigate();
 
-  const onSignIn = (data) => {
-    // TODO: call api to sign a user
-    reset();
-  };
+  async function onSignIn(formData) {
+    try {
+      const {
+        data: { user, accessToken },
+      } = await request.post('/user/signin', formData);
+
+      dispatch({ type: 'setUser', payload: { user, accessToken } });
+      setDataOnLocalStorage('user', user);
+      setDataOnLocalStorage('accessToken', accessToken);
+      reset();
+
+      navigate('/');
+    } catch (errors) {
+      alert(errors.response.data?.errors?.message || 'Something went wrong');
+    }
+  }
 
   return (
     <Container>

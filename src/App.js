@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound';
 import Wishlist from './pages/Wishlist';
 import Header from './components/Header';
 import { useUser } from './contexts/user';
-import { getDataFromLocalStorage } from './utils/localStroage';
+import { getDataFromLocalStorage } from './utils/localStorage';
 
 function App() {
   const [, dispatch] = useUser();
