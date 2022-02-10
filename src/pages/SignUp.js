@@ -1,18 +1,37 @@
 import { Container, Form, Button, Col, Card } from 'react-bootstrap';
 import { useForm, Controller } from 'react-hook-form';
+import { setDataOnLocalStorage } from '../utils/localStroage';
+
+import request from '../utils/request';
+import { useUser } from '../contexts/user';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
   const {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
+  const [, dispatch] = useUser();
+  const navigate = useNavigate();
 
-  const onSignUp = (data) => {
-    // TODO: call api to signup a user
-    reset();
-  };
+  async function onSignUp(formData) {
+    try {
+      const {
+        data: { user, accessToken },
+      } = await request.post('/user/signup', formData);
+
+      dispatch({ type: 'setUser', payload: { user, accessToken } });
+      setDataOnLocalStorage('user', user);
+      setDataOnLocalStorage('accessToken', accessToken);
+      reset();
+
+      navigate('/');
+    } catch (errors) {
+      alert(errors.response.data?.errors?.message || 'Something went wrong');
+    }
+  }
 
   return (
     <Container>
@@ -133,8 +152,8 @@ export default function SignUp() {
                 </Form.Control.Feedback>
               )}
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
+            <Button disabled={isSubmitting} variant="primary" type="submit">
+              {isSubmitting ? 'Loading' : 'Submit'}
             </Button>
           </Form>
         </Card>
