@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Container,
   InputGroup,
@@ -7,12 +8,19 @@ import {
   NavDropdown,
   Button,
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useUser } from '../contexts/user';
 
 export default function Header() {
   const [state] = useUser();
+  const navigate = useNavigate();
+  const [searchText, setSearchText] = useState('');
+
+  function handleSearch() {
+    setSearchText('');
+    return navigate(`/search?text=${searchText}`);
+  }
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
@@ -24,11 +32,13 @@ export default function Header() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <InputGroup className="mx-lg-auto" style={{ width: '400px' }}>
             <FormControl
+              value={searchText}
+              onChange={({ target }) => setSearchText(target.value)}
               placeholder="Search product by title"
               aria-label="Search product by title"
               aria-describedby="basic-addon2"
             />
-            <Button variant="light" id="button-addon2">
+            <Button onClick={handleSearch} variant="light" id="button-addon2">
               Search
             </Button>
           </InputGroup>
