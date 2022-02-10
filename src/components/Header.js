@@ -11,15 +11,22 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useUser } from '../contexts/user';
+import { clearDataFromLocalStorage } from '../utils/localStorage';
 
 export default function Header() {
-  const [state] = useUser();
+  const [state, dispatch] = useUser();
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState('');
 
   function handleSearch() {
     setSearchText('');
     return navigate(`/search?text=${searchText}`);
+  }
+
+  function signOut() {
+    dispatch({ type: 'reset' });
+    clearDataFromLocalStorage();
+    navigate('/signin');
   }
 
   return (
@@ -55,7 +62,9 @@ export default function Header() {
                   <NavDropdown.Item as={Link} to="/wishlist">
                     Wishlists
                   </NavDropdown.Item>
-                  <NavDropdown.Item>Sign out</NavDropdown.Item>
+                  <NavDropdown.Item onClick={signOut}>
+                    Sign out
+                  </NavDropdown.Item>
                 </NavDropdown>
               </>
             ) : (
