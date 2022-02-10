@@ -5,7 +5,7 @@ export default function SignIn() {
     <Container>
       <Col className="mx-auto" xs={12} sm={10} md={6} lg={6} xl={4}>
         <Card className="mt-5 p-3">
-          <h2 className="text-center mb-3">Log in</h2>
+          <h2 className="text-center mb-3">Sign In</h2>
           <Form>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
