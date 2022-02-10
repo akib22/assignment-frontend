@@ -9,8 +9,11 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+import { useUser } from '../contexts/user';
+
 export default function Header() {
-  // TODO: toggle user-profile/logout button based on user login state
+  const [state] = useUser();
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
       <Container>
@@ -33,18 +36,28 @@ export default function Header() {
             <Nav.Link as={Link} to="/">
               Products
             </Nav.Link>
-            <NavDropdown title="User name" id="collasible-nav-dropdown">
-              <NavDropdown.Item as={Link} to="/wishlist">
-                Wishlists
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link>Sign out</Nav.Link>
-            <Nav.Link as={Link} to="/signin">
-              Sign In
-            </Nav.Link>
-            <Nav.Link as={Link} to="/signup">
-              Sign Up
-            </Nav.Link>
+            {state.user ? (
+              <>
+                <NavDropdown
+                  title={state.user.name}
+                  id="collasible-nav-dropdown"
+                >
+                  <NavDropdown.Item as={Link} to="/wishlist">
+                    Wishlists
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>Sign out</NavDropdown.Item>
+                </NavDropdown>
+              </>
+            ) : (
+              <>
+                <Nav.Link as={Link} to="/signin">
+                  Sign In
+                </Nav.Link>
+                <Nav.Link as={Link} to="/signup">
+                  Sign Up
+                </Nav.Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

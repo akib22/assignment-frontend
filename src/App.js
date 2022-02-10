@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Header from './components/Header';
-import { useUser } from './contexts/user';
 
 import Home from './pages/Home';
-import NotFound from './pages/NotFound';
 import Search from './pages/Search';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import NotFound from './pages/NotFound';
 import Wishlist from './pages/Wishlist';
+import Header from './components/Header';
+import { useUser } from './contexts/user';
 import { getDataFromLocalStorage } from './utils/localStroage';
 
 function App() {
