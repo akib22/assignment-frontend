@@ -19,12 +19,11 @@ export default function SignUp() {
   async function onSignUp(formData) {
     try {
       const {
-        data: { user, accessToken },
+        data: { user, token },
       } = await request.post('/user/signup', formData);
-
-      dispatch({ type: 'setUser', payload: { user, accessToken } });
+      dispatch({ type: 'setUser', payload: { user, accessToken: token } });
       setDataOnLocalStorage('user', user);
-      setDataOnLocalStorage('accessToken', accessToken);
+      setDataOnLocalStorage('accessToken', token);
       reset();
 
       navigate('/');

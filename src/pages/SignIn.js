@@ -19,12 +19,12 @@ export default function SignIn() {
   async function onSignIn(formData) {
     try {
       const {
-        data: { user, accessToken },
+        data: { user, token },
       } = await request.post('/user/signin', formData);
 
-      dispatch({ type: 'setUser', payload: { user, accessToken } });
+      dispatch({ type: 'setUser', payload: { user, accessToken: token } });
       setDataOnLocalStorage('user', user);
-      setDataOnLocalStorage('accessToken', accessToken);
+      setDataOnLocalStorage('accessToken', token);
       reset();
 
       navigate('/');
