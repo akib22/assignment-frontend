@@ -1,11 +1,47 @@
 import { Card, Button, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+
+import request from '../utils/request';
+import { useUser } from '../contexts/user';
 import propTypes from '../utils/propTypes';
+import { setDataOnLocalStorage } from '../utils/localStorage';
 
 export default function ProductCard({ product }) {
+  const [state, dispatch] = useUser();
+  const navigate = useNavigate();
   const photoUrl = product.photoUrl || `https://picsum.photos/id/96/200/200`;
 
+  const { user, accessToken } = state;
+  const isWishlistProduct = user?.wishlists.includes(product._id) || false;
+
+  async function addToWishlist(productId) {
+    try {
+      if (!accessToken) {
+        return navigate('/signin');
+      }
+
+      const { data } = await request.patch(
+        '/products/wishlist/add',
+        { productId },
+        {
+          headers: {
+            Authorization: `bearer ${state.accessToken}`,
+          },
+        }
+      );
+
+      const newWishlists = [...user.wishlists, productId];
+      const userWithNewWishlists = { ...user, wishlists: newWishlists };
+      setDataOnLocalStorage('user', userWithNewWishlists);
+      dispatch({ type: 'setUser', payload: { user: userWithNewWishlists } });
+      alert(data?.message || 'Successfully added');
+    } catch (error) {
+      alert('Something went wrong.');
+    }
+  }
+
   return (
-    <Col className="mb-3" sm={12} md={6} lg={4} xl={3}>
+    <Col className="mb-4" sm={12} md={6} lg={4} xl={3}>
       <Card>
         <Card.Img className="image" src={`${photoUrl}`} />
         <Card.Body>
@@ -14,7 +50,16 @@ export default function ProductCard({ product }) {
             Price: {product.price}$
           </Card.Subtitle>
 
-          <Button variant="primary">Add to wishlist</Button>
+          {isWishlistProduct ? (
+            <Button variant="danger">Remove from wishlist</Button>
+          ) : (
+            <Button
+              variant="primary"
+              onClick={() => addToWishlist(product._id)}
+            >
+              Add to wishlist
+            </Button>
+          )}
         </Card.Body>
       </Card>
     </Col>
