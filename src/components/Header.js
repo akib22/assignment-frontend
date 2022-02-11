@@ -45,7 +45,12 @@ export default function Header() {
               aria-label="Search product by title"
               aria-describedby="basic-addon2"
             />
-            <Button onClick={handleSearch} variant="light" id="button-addon2">
+            <Button
+              onClick={handleSearch}
+              disabled={searchText.length < 3}
+              variant="light"
+              id="button-addon2"
+            >
               Search
             </Button>
           </InputGroup>
