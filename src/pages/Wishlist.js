@@ -29,7 +29,7 @@ export default function Wishlist() {
       }
     }
 
-    fetchWishlistProducts();
+    if (state.accessToken) fetchWishlistProducts();
   }, [state.accessToken]);
 
   if (loading) {
