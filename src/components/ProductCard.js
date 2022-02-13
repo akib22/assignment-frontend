@@ -63,7 +63,7 @@ export default function ProductCard({ product }) {
   }
 
   return (
-    <Col className="mb-4" sm={12} md={6} lg={4} xl={3}>
+    <Col className="mb-4" xs={12} sm={6} md={6} lg={4} xl={3}>
       <Card>
         <Card.Img className="image" src={`${photoUrl}`} />
         <Card.Body>
