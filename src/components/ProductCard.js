@@ -5,7 +5,6 @@ import request from '../utils/request';
 import { useUser } from '../contexts/user';
 import propTypes from '../utils/propTypes';
 import { setDataOnLocalStorage } from '../utils/localStorage';
-import axios from 'axios';
 
 export default function ProductCard({ product }) {
   const [state, dispatch] = useUser();
@@ -46,8 +45,8 @@ export default function ProductCard({ product }) {
 
   async function removeFromWishlist(productId) {
     try {
-      const { data } = await axios({
-        url: `${process.env.REACT_APP_BASE_URL}products/wishlist/remove`,
+      const { data } = await request({
+        url: `/products/wishlist/remove`,
         method: 'delete',
         data: { productId },
         headers: { Authorization: `bearer ${state.accessToken}` },
