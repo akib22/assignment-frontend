@@ -9,7 +9,7 @@ import { setDataOnLocalStorage } from '../utils/localStorage';
 export default function ProductCard({ product }) {
   const [state, dispatch] = useUser();
   const navigate = useNavigate();
-  const photoUrl = product.photoUrl || `https://picsum.photos/id/96/200/200`;
+  const imageUrl = product.imageUrl || `https://picsum.photos/id/96/200/200`;
 
   const { user, accessToken } = state;
   const isWishlistProduct = user?.wishlists.includes(product._id) || false;
@@ -65,7 +65,7 @@ export default function ProductCard({ product }) {
   return (
     <Col className="mb-4" xs={12} sm={6} md={6} lg={4} xl={3}>
       <Card>
-        <Card.Img className="image" src={`${photoUrl}`} />
+        <Card.Img className="image" src={`${imageUrl}`} />
         <Card.Body>
           <Card.Title>{product.title}</Card.Title>
           <Card.Subtitle className="mb-1">
