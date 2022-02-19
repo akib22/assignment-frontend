@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Card, Button, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,6 +9,7 @@ import { setDataOnLocalStorage } from '../utils/localStorage';
 
 export default function ProductCard({ product }) {
   const [state, dispatch] = useUser();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const imageUrl = product.imageUrl || `https://picsum.photos/id/96/200/200`;
 
@@ -15,14 +17,13 @@ export default function ProductCard({ product }) {
   const isWishlistProduct = user?.wishlists.includes(product._id) || false;
 
   // TODO: (Improvement)
-  //     1. Extract wishlist from user object
-  //     2. Make a service class to handle server requests
+  //     1. Make a service class to handle server requests
   async function addToWishlist(productId) {
     try {
       if (!accessToken) {
         return navigate('/signin');
       }
-
+      setLoading(true);
       const { data } = await request.patch(
         '/products/wishlist/add',
         { productId },
@@ -37,14 +38,21 @@ export default function ProductCard({ product }) {
       const userWithNewWishlists = { ...user, wishlists: newWishlists };
       setDataOnLocalStorage('user', userWithNewWishlists);
       dispatch({ type: 'setUser', payload: { user: userWithNewWishlists } });
+      dispatch({
+        type: 'setWishlists',
+        payload: { wishlists: [...state.wishlists, product] },
+      });
       alert(data?.message || 'Successfully added');
+      setLoading(false);
     } catch (error) {
       alert('Something went wrong.');
+      setLoading(false);
     }
   }
 
   async function removeFromWishlist(productId) {
     try {
+      setLoading(true);
       const { data } = await request({
         url: `/products/wishlist/remove`,
         method: 'delete',
@@ -54,11 +62,21 @@ export default function ProductCard({ product }) {
 
       const newWishlists = user.wishlists.filter((id) => id !== productId);
       const userWithNewWishlists = { ...user, wishlists: newWishlists };
+      const wishlists = state.wishlists.filter(
+        (item) => item._id !== productId
+      );
+
       setDataOnLocalStorage('user', userWithNewWishlists);
       dispatch({ type: 'setUser', payload: { user: userWithNewWishlists } });
+      dispatch({
+        type: 'setWishlists',
+        payload: { wishlists },
+      });
       alert(data?.message || 'Successfully removed.');
+      setLoading(false);
     } catch (error) {
       alert('Something went wrong.');
+      setLoading(false);
     }
   }
 
@@ -75,6 +93,7 @@ export default function ProductCard({ product }) {
           {isWishlistProduct ? (
             <Button
               variant="danger"
+              disabled={loading}
               onClick={() => removeFromWishlist(product._id)}
             >
               Remove from wishlist
@@ -82,6 +101,7 @@ export default function ProductCard({ product }) {
           ) : (
             <Button
               variant="primary"
+              disabled={loading}
               onClick={() => addToWishlist(product._id)}
             >
               Add to wishlist

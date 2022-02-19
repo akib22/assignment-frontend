@@ -3,7 +3,7 @@ import { createContext, useReducer, useContext } from 'react';
 const UserCounter = createContext();
 
 function UserProvider({
-  initialState = { user: null, accessToken: null },
+  initialState = { user: null, accessToken: null, wishlists: [] },
   ...props
 }) {
   const [state, dispatch] = useReducer((state, { type, payload }) => {
@@ -11,9 +11,15 @@ function UserProvider({
       case 'setUser': {
         return { ...state, ...payload };
       }
-      case 'reset': {
-        return { user: null, accessToken: null };
+
+      case 'setWishlists': {
+        return { ...state, ...payload };
       }
+
+      case 'reset': {
+        return { user: null, accessToken: null, wishlists: null };
+      }
+
       default: {
         throw new Error(`Unhandled action type: ${type}`);
       }
@@ -21,6 +27,7 @@ function UserProvider({
   }, initialState);
 
   const value = [state, dispatch];
+
   return <UserCounter.Provider value={value} {...props} />;
 }
 

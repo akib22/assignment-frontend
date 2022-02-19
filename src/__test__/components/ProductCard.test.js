@@ -11,7 +11,7 @@ window.alert = mockAlert;
 
 jest.mock('../../utils/request');
 
-const wrapper = (state = { user: null, accessToken: null }) => (
+const wrapper = (state = { user: null, accessToken: null, wishlists: [] }) => (
   <BrowserRouter>
     <UserProvider initialState={state}>
       <ProductCard product={products[0]}></ProductCard>
@@ -39,7 +39,7 @@ describe('ProductCard', () => {
     request.patch.mockReturnValue({ data });
 
     const { getByRole, getByText } = render(
-      wrapper({ user: { wishlists: [] }, accessToken: '1234' })
+      wrapper({ user: { wishlists: [] }, accessToken: '1234', wishlists: [] })
     );
     const button = getByRole('button', { name: /add to wishlist/i });
     fireEvent.click(button);
@@ -59,7 +59,7 @@ describe('ProductCard', () => {
 
     const user = { wishlists: [products[0]._id] };
     const { getByText, getByRole } = render(
-      wrapper({ user, accessToken: 'token' })
+      wrapper({ user, accessToken: 'token', wishlists: [products[0]] })
     );
     const button = getByRole('button', { name: /remove from wishlist/i });
     fireEvent.click(button);
