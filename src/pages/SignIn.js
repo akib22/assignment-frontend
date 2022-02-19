@@ -1,10 +1,14 @@
 import { Container, Form, Button, Col, Card } from 'react-bootstrap';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import request from '../utils/request';
 import { useUser } from '../contexts/user';
-import { setDataOnLocalStorage } from '../utils/localStorage';
+import {
+  getDataFromLocalStorage,
+  setDataOnLocalStorage,
+} from '../utils/localStorage';
 
 export default function SignIn() {
   const {
@@ -32,6 +36,15 @@ export default function SignIn() {
       alert(errors.response.data?.errors?.message || 'Something went wrong');
     }
   }
+
+  useEffect(() => {
+    // navigate user to home page when they are signed-in
+    const isUserSignedIn = getDataFromLocalStorage('user');
+
+    if (isUserSignedIn) {
+      navigate('/');
+    }
+  }, []);
 
   return (
     <Container>
