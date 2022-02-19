@@ -1,10 +1,15 @@
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { UserProvider } from '../../contexts/user';
 import Header from '../../components/Header';
 
-jest.mock('axios');
+const mockUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockUsedNavigate,
+}));
 
 const wrapper = (state = { user: null, accessToken: null }) =>
   render(
@@ -35,5 +40,25 @@ describe('Component -> Header', () => {
     const userName = screen.getByText(new RegExp(state.user.name, 'i'));
 
     expect(userName).toBeInTheDocument();
+  });
+
+  test('should search work properly', async () => {
+    wrapper();
+
+    const searchText = 'test';
+    const searchInput = screen.getByRole('textbox', {
+      name: /search product by title/i,
+    });
+    const searchButton = screen.getByRole('button', { name: /search/i });
+
+    // input length less than 3, button will be disabled
+    expect(searchButton).toBeDisabled();
+
+    fireEvent.change(searchInput, { target: { value: searchText } });
+    expect(searchButton).not.toBeDisabled();
+
+    fireEvent.click(searchButton);
+    expect(mockUsedNavigate).toBeCalledTimes(1);
+    expect(mockUsedNavigate).toBeCalledWith(`/search?text=${searchText}`);
   });
 });
