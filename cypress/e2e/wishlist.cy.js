@@ -4,8 +4,7 @@ describe('Wishlist', () => {
   });
 
   it('should not add product to wishlist when user not signed in', () => {
-    const button = cy.get('[data-testid="addToWishlist"]').eq(0);
-    button.click();
+    cy.get('[data-testid="addToWishlist"]').eq(0).click();
     cy.location('pathname').should('eq', '/signin');
   });
 
@@ -17,8 +16,7 @@ describe('Wishlist', () => {
     cy.get('[data-testid="submitButton"]').click();
 
     // add product to wishlist
-    const button = cy.get('[data-testid="addToWishlist"]').eq(0);
-    button.click();
+    cy.get('[data-testid="addToWishlist"]').eq(0).click();
     cy.get('[data-testid="productCard"]')
       .eq(0)
       .contains('Remove from wishlist');
@@ -37,8 +35,7 @@ describe('Wishlist', () => {
     cy.get('[data-testid="submitButton"]').click();
 
     // remove product from wishlist
-    const button = cy.get('[data-testid="removeFromWishlist"]').eq(0);
-    button.click();
+    cy.get('[data-testid="removeFromWishlist"]').eq(0).click();
     cy.get('[data-testid="productCard"]').eq(0).contains('Add to wishlist');
 
     // should not show the product in wishlist page
