@@ -52,7 +52,11 @@ export default function SignIn() {
         <Card className="mt-5 p-3">
           <h2 className="text-center mb-3">Sign In</h2>
           <Form onSubmit={handleSubmit(onSignIn)}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group
+              className="mb-3"
+              controlId="formBasicEmail"
+              data-testid="email"
+            >
               <Form.Label>Email address</Form.Label>
               <Controller
                 control={control}
@@ -77,7 +81,11 @@ export default function SignIn() {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group
+              className="mb-3"
+              controlId="formBasicPassword"
+              data-testid="password"
+            >
               <Form.Label>Password</Form.Label>
               <Controller
                 control={control}
@@ -108,7 +116,7 @@ export default function SignIn() {
                 </Form.Control.Feedback>
               )}
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" data-testid="submitButton">
               Submit
             </Button>
           </Form>

@@ -81,7 +81,15 @@ export default function ProductCard({ product }) {
   }
 
   return (
-    <Col className="mb-4" xs={12} sm={6} md={6} lg={4} xl={3}>
+    <Col
+      className="mb-4"
+      xs={12}
+      sm={6}
+      md={6}
+      lg={4}
+      xl={3}
+      data-testid="productCard"
+    >
       <Card>
         <Card.Img className="image" src={`${imageUrl}`} />
         <Card.Body>
@@ -94,6 +102,7 @@ export default function ProductCard({ product }) {
             <Button
               variant="danger"
               disabled={loading}
+              data-testid="removeFromWishlist"
               onClick={() => removeFromWishlist(product._id)}
             >
               Remove from wishlist
@@ -102,6 +111,7 @@ export default function ProductCard({ product }) {
             <Button
               variant="primary"
               disabled={loading}
+              data-testid="addToWishlist"
               onClick={() => addToWishlist(product._id)}
             >
               Add to wishlist

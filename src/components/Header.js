@@ -63,8 +63,13 @@ export default function Header() {
                 <NavDropdown
                   title={state.user.name}
                   id="collasible-nav-dropdown"
+                  data-testid="userDropdown"
                 >
-                  <NavDropdown.Item as={Link} to="/wishlist">
+                  <NavDropdown.Item
+                    as={Link}
+                    to="/wishlist"
+                    data-testid="wishlist-link"
+                  >
                     Wishlists
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={signOut}>
@@ -74,7 +79,7 @@ export default function Header() {
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to="/signin">
+                <Nav.Link as={Link} to="/signin" data-testid="signIn-link">
                   Sign In
                 </Nav.Link>
                 <Nav.Link as={Link} to="/signup">
